@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 namespace DungeonExplorer{
     internal class Program{
         static void Main(string[] args){
-            Game game = new Game();
+            string name;
+            do {
+                Console.Write("Please Enter Your Name: ");
+                name = Console.ReadLine();
+            } while (string.IsNullOrEmpty(name));
+            Console.Clear();
+            Game game = new Game(name);
             game.Start();
-            Console.WriteLine("Waiting for your Implementation");
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
