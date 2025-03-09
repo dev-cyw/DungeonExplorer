@@ -27,14 +27,19 @@ namespace DungeonExplorer{
             if (random < 40){ // 40% Chance no item is found 
                 return null;
             }
-            if (random < 90){
+            if (random < 90){ // 50% of Health Potion 
                 return new Item("Health Potion", "A potion that seems to rejuvenate your health by 20hp");
             }
+            // 10% For Key
             return new Item("Key", "A mysterious key that may open some doors deeper in the dungeon");
         }
 
         public Item GetItem(){
             return item;
+        }
+
+        public bool CanOpenDoor(){
+            return false;
         }
     }
 }

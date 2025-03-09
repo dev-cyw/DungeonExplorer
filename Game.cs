@@ -44,7 +44,10 @@ namespace DungeonExplorer{
                         break;
                     case 4 : // Move Room
                         break;
-                    case 5: // Quit
+                    case 5:
+                        ItemUsage();
+                        break;
+                    case 6: // Quit
                         Console.WriteLine("You've Quit!");
                         playing = false;
                         break;
@@ -60,8 +63,33 @@ namespace DungeonExplorer{
                               "(1) Show Current Room\n" +
                               "(2) Display Status\n" +
                               "(3) Pickup Item\n" +
-                              "(4) Move To a different Room" +
-                              "(5) Exit");
+                              "(4) Move To a different Room\n" +
+                              "(5) Use Item" +
+                              "(6) Exit");
+        }
+
+        private void ItemUsage(){
+            if (player.GetInventoryCount() == 0){
+                Console.WriteLine("There is nothing in your inventory");
+                return;
+            }
+            Console.WriteLine("Which Item would you like to use?");
+            if (player.InventoryHasItem("Key")){
+                int amount = player.GetItemAmount("Key");
+                Console.WriteLine("Key, ({0})", 0);
+            }
+
+            if (player.InventoryHasItem("Health Potion")){
+                int amount = player.GetItemAmount("Health Potion");
+                Console.WriteLine("Health Potion, ({0})", amount);
+            }
+        }
+
+        private void UseKey(){
+            if (currentRoom.CanOpenDoor() == true && player.InventoryHasItem("Key")){
+                player.RemoveItem("Key");
+            }
+            // Do something with a room
         }
 
         private void CurrentStatus(){

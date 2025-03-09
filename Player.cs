@@ -24,5 +24,38 @@ namespace DungeonExplorer{
         public string InventoryContents(){
             return string.Join(", ", inventory);
         }
+
+        public bool InventoryHasItem(string name){
+            foreach (var item in inventory){
+                if (item.GetName() == name){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void RemoveItem(string name){
+            foreach (var item in inventory){
+                if (item.GetName() == name){
+                    inventory.Remove(item);
+                    return;
+                }
+            }
+            Console.WriteLine("Item was not found in the inventory");
+        }
+
+        public int GetItemAmount(string name){
+            int amount = 0;
+            foreach (var item in inventory){
+                if (item.GetName() == name){
+                    amount++;
+                }
+            }
+            return amount;
+        }
+
+        public int GetInventoryCount(){
+            return inventory.Count;
+        }
     }
 }
