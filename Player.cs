@@ -5,10 +5,10 @@ namespace DungeonExplorer{
     public class Player{
         public string Name { get; private set; }
         public int Health { get; private set; }
-        private List<Item> inventory = new List<Item>() { };
+        public int GoblinsDefeated { get; private set; }
+        private List<Item> inventory = new List<Item>();
 
-        public Player(string name, int health) 
-        {
+        public Player(string name, int health) {
             Name = name;
             Health = health;
         }
@@ -25,7 +25,6 @@ namespace DungeonExplorer{
         public void SetHealth(int health){
             Health = health;
         }
-
         
         public string InventoryContents(){
             return string.Join(", ", inventory);
@@ -62,6 +61,10 @@ namespace DungeonExplorer{
 
         public int GetInventoryCount(){
             return inventory.Count;
+        }
+
+        public void IncreaseGoblinsDefeated(){
+            GoblinsDefeated++;
         }
     }
 }

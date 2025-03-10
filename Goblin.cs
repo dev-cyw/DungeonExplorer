@@ -5,7 +5,7 @@ namespace DungeonExplorer{
     public class Goblin{
         private int health{ get; set; } = 10;
 
-        public void TakeDamage(Player player){
+        public void DoBattle(Player player){
             bool alive = true;
             Console.WriteLine("Goblin's health: " + health);
             while (alive){
@@ -13,6 +13,7 @@ namespace DungeonExplorer{
                 health -= damage;
                 if (health <= 0){
                     Console.WriteLine("The Goblin is dead");
+                    player.IncreaseGoblinsDefeated();
                     alive = false;
                 }
                 else{

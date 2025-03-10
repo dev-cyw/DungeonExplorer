@@ -2,35 +2,35 @@
 using System.Runtime;
 
 namespace DungeonExplorer{
-    public class Room{
-        private static readonly string[] RoomDescriptions ={
+    public class Room {
+        private static readonly string[] s_roomDescriptions ={
             "Something about a chest",
             "Ohio",
             ""
         };
 
-        private string description;
-        private Item item;
-        private int X, Y;
-        public  Goblin enemy{ get; private set; }
-        public bool itemPicked { get; private set; }
+        private string _description;
+        private Item _item;
+        private int _x, _y;
+        public Goblin Enemy{ get; private set; }
+        public bool ItemSearched { get; private set; }
         public bool HasChest { get; private set; }
         
-        public Room(int x, int y){
-            this.description = RoomDescriptions[new Random().Next(RoomDescriptions.Length)];
-            if (description == RoomDescriptions[0]) { HasChest = true; }
-            item = CreateItem();
-            X = x; Y = y;
-            CreateGoblin();
+        // Room Constructor
+        // Parameters X and Y To know the current Location of the room
+        // Sets the random room description from the static array
+        // Sets what item will be in the room
+        // Makes the enemy Spawn
+        public Room(int X, int Y){
+            _description = s_roomDescriptions[new Random().Next(s_roomDescriptions.Length)];
+            if (_description == s_roomDescriptions[0]) { HasChest = true; }
+            _item = CreateItem();
+            _x = X; _y = Y;
+            Enemy = new Goblin();
         }
 
         public string GetDescription(){
-            return description;
-        }
-
-        private void CreateGoblin(){
-            int random = new Random().Next(100);
-            enemy = new Goblin();
+            return _description;
         }
 
         private Item CreateItem(){
@@ -45,20 +45,20 @@ namespace DungeonExplorer{
             return new Item("Key", "A mysterious key that may open some doors deeper in the dungeon");
         }
         
-        public void ItemPicked(){
-            itemPicked = true;
+        public void ItemPickedUp(){
+            ItemSearched = true;
         }
         
         public Item GetItem(){
-            return item;
+            return _item;
         }
 
         public int GetXCoordinate(){
-            return X;
+            return _x;
         }
 
         public int GetYCoordinate(){
-            return Y;
+            return _y;
         }
     }
 }

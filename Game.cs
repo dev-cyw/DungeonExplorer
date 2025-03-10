@@ -38,11 +38,11 @@ namespace DungeonExplorer{
                         CurrentStatus();
                         break;
                     case 3: // Pickup Item
-                        if (currentRoom.itemPicked == true){
+                        if (currentRoom.ItemSearched == true){
                             Console.WriteLine("Cannot pickup another item");
                         }
                         player.PickUpItem(currentRoom.GetItem());
-                        currentRoom.ItemPicked();
+                        currentRoom.ItemPickedUp();
                         break;
                     case 4 : // Move Room
                         MoveRoom();
@@ -58,6 +58,12 @@ namespace DungeonExplorer{
                         Console.WriteLine("Invalid Input");
                         break;
                 }
+
+                if (player.GoblinsDefeated >= 10){
+                    Console.WriteLine("Well Done you have defeated all the Goblins!");
+                    playing = false;
+                }
+                
             } while(playing);
         }
         
@@ -178,8 +184,8 @@ namespace DungeonExplorer{
                 }
             } while (invalidAction);
 
-            if (currentRoom.enemy != null){
-                currentRoom.enemy.TakeDamage(player);
+            if (currentRoom.Enemy != null){
+                currentRoom.Enemy.DoBattle(player);
             }
         }
     }
