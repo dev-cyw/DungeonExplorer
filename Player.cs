@@ -5,7 +5,7 @@ namespace DungeonExplorer{
     public class Player{
         public string Name { get; private set; }
         public int Health { get; private set; }
-        private List<Item> inventory = new List<Item>();
+        private List<Item> inventory = new List<Item>() { };
 
         public Player(string name, int health) 
         {
@@ -21,6 +21,12 @@ namespace DungeonExplorer{
                 inventory.Add(item);
             }
         }
+
+        public void SetHealth(int health){
+            Health = health;
+        }
+
+        
         public string InventoryContents(){
             return string.Join(", ", inventory);
         }
