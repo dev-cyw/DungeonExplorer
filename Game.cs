@@ -20,7 +20,6 @@ namespace DungeonExplorer{
         
         /// <summary>
         /// The Main game loop
-        /// Shows the user what inputs they can choose
         /// Gets the input and then does the task
         /// Also has a win condition of defeat 5 Goblins 
         /// </summary>
@@ -76,7 +75,9 @@ namespace DungeonExplorer{
             } while(playing);
         }
         
-        
+        /// <summary>
+        /// Shows the user what inputs they can choose
+        /// </summary>
         private static void ShowOptions(){
             Console.WriteLine("Choose an option:\n" +
                               "(1) Show Current Room\n" +
@@ -122,11 +123,15 @@ namespace DungeonExplorer{
                     case "health":
                     case "potion":
                     case "health potion":
+                        if (!_player.InventoryHasItem("Health Potion")){
+                            break;
+                        }
                         int health = _player.Health + 20;
                         if (health > 50){
                             health = 50;
                         }
                         _player.SetHealth(health);
+                        
                         ValidInput = true;
                         break;
                     default:
@@ -145,7 +150,10 @@ namespace DungeonExplorer{
             Console.ReadKey();
             Environment.Exit(0);
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         private void CurrentStatus(){
             Console.WriteLine($"{_player.Name}'s Status");
             Console.WriteLine("Health: {0}", _player.Health);

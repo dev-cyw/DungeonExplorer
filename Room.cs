@@ -33,7 +33,8 @@ namespace DungeonExplorer{
             _x = x; _y = y;
             Enemy = new Goblin();
         }
-
+        
+        // Getters
         public string GetDescription(){
             return _description;
         }
@@ -53,7 +54,9 @@ namespace DungeonExplorer{
         public void ItemPickedUp(){
             ItemSearched = true;
         }
-
+        
+        // Setters
+        
         /// <summary>
         /// In the constructor to generate a random item
         /// </summary>
