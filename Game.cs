@@ -4,19 +4,28 @@ using System.Runtime;
 
 namespace DungeonExplorer{
     internal class Game{
-        private Player player;
-        private Room currentRoom;
-        private Room[,] map;
+        private Player _player;
+        private Room _currentRoom;
+        private Room[,] _map;
+        /// <summary>
+        /// Game Constructor with the player name
+        /// Initialize the game with a map and a player and sets the spawn room
+        /// </summary>
+        /// <param name="playerName">set the name in the player object</param>
         public Game(string playerName){
-            // Initialize the game with one room and one player
-            player = new Player(playerName, 50);
-            map = CreateMap();
-            currentRoom = map[2,0];
+            _player = new Player(playerName, 50);
+            _map = CreateMap();
+            _currentRoom = _map[2,0];
         }
-
+        
+        /// <summary>
+        /// The Main game loop
+        /// Shows the user what inputs they can choose
+        /// Gets the input and then does the task
+        /// Also has a win condition of defeat 5 Goblins 
+        /// </summary>
         public void Start(){
             Console.WriteLine("You Enter the Dungeon\n");
-            // Change the playing logic into true and populate the while loop
             bool playing = true;
             do {
                 ShowOptions();
@@ -28,21 +37,21 @@ namespace DungeonExplorer{
                     Console.WriteLine("Only Input numbers");
                     continue;
                 }
-                
+
                 switch (option){
                     case 1: // ViewCurrentRoom
-                        Console.WriteLine(currentRoom.GetDescription());
-                        Console.WriteLine("Current Coordinates: {0},{1}\n", currentRoom.GetXCoordinate(), currentRoom.GetYCoordinate());
+                        Console.WriteLine(_currentRoom.GetDescription());
+                        Console.WriteLine("Current Coordinates: {0},{1}\n", _currentRoom.GetXCoordinate(), _currentRoom.GetYCoordinate());
                         break;
                     case 2: // Display Status
                         CurrentStatus();
                         break;
                     case 3: // Pickup Item
-                        if (currentRoom.ItemSearched == true){
+                        if (_currentRoom.ItemSearched == true){
                             Console.WriteLine("Cannot pickup another item");
                         }
-                        player.PickUpItem(currentRoom.GetItem());
-                        currentRoom.ItemPickedUp();
+                        _player.PickUpItem(_currentRoom.GetItem());
+                        _currentRoom.ItemPickedUp();
                         break;
                     case 4 : // Move Room
                         MoveRoom();
@@ -59,15 +68,16 @@ namespace DungeonExplorer{
                         break;
                 }
 
-                if (player.GoblinsDefeated >= 10){
+                if (_player.GoblinsDefeated >= 5){
                     Console.WriteLine("Well Done you have defeated all the Goblins!");
-                    playing = false;
+                    PlayerWin();
                 }
-                
+
             } while(playing);
         }
         
-        private void ShowOptions(){
+        
+        private static void ShowOptions(){
             Console.WriteLine("Choose an option:\n" +
                               "(1) Show Current Room\n" +
                               "(2) Display Status\n" +
@@ -77,18 +87,23 @@ namespace DungeonExplorer{
                               "(6) Exit");
         }
 
+        /// <summary>
+        /// Shows the amount of each item there is
+        /// Asks the user for input on which item they would like to use
+        /// if key and treasure chest exists the player wins!
+        /// </summary>
         private void ItemUsage(){
-            if (player.GetInventoryCount() == 0){
+            if (_player.GetInventoryCount() == 0){
                 Console.WriteLine("There is nothing in your inventory");
                 return;
             }
-            if (player.InventoryHasItem("Key")){
-                int amount = player.GetItemAmount("Key");
-                Console.WriteLine("Key, ({0})", 0);
+            if (_player.InventoryHasItem("Key")){
+                int amount = _player.GetItemAmount("Key");
+                Console.WriteLine("Key, ({0})", amount);
             }
 
-            if (player.InventoryHasItem("Health Potion")){
-                int amount = player.GetItemAmount("Health Potion");
+            if (_player.InventoryHasItem("Health Potion")){
+                int amount = _player.GetItemAmount("Health Potion");
                 Console.WriteLine("Health Potion, ({0})", amount);
             }
             bool ValidInput = false;
@@ -97,20 +112,21 @@ namespace DungeonExplorer{
                 string option = Console.ReadLine()?.ToLower();
                 switch (option){
                     case "key":
-                        if (currentRoom.HasChest && player.InventoryHasItem("Key")){
-                            player.RemoveItem("key");
+                        if (_currentRoom.HasChest && _player.InventoryHasItem("Key")){
+                            _player.RemoveItem("key");
                             Console.WriteLine("A Chest full of treasure opened");
+                            PlayerWin();
                         }
                         ValidInput = true;
                         break;
                     case "health":
                     case "potion":
                     case "health potion":
-                        int health = player.Health + 20;
+                        int health = _player.Health + 20;
                         if (health > 50){
                             health = 50;
                         }
-                        player.SetHealth(health);
+                        _player.SetHealth(health);
                         ValidInput = true;
                         break;
                     default:
@@ -120,13 +136,26 @@ namespace DungeonExplorer{
             } while (!ValidInput);
 
         }
-
-        private void CurrentStatus(){
-            Console.WriteLine($"{player.Name}'s Status");
-            Console.WriteLine("Health: {0}", player.Health);
-            Console.WriteLine("Current Items: {0}", player.InventoryContents());
+        /// <summary>
+        /// Tells the player that they have won and then exits the program
+        /// </summary>
+        private void PlayerWin(){
+            Console.WriteLine("You have won!");
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
+            Environment.Exit(0);
         }
 
+        private void CurrentStatus(){
+            Console.WriteLine($"{_player.Name}'s Status");
+            Console.WriteLine("Health: {0}", _player.Health);
+            Console.WriteLine("Current Items: {0}", _player.InventoryContents());
+        }
+        
+        /// <summary>
+        /// Used in the Constructor to generate the map 
+        /// </summary>
+        /// <returns>A 2-dimensional array of room objects</returns>
         private Room[,] CreateMap(){
             Room[,] Map = new Room[5,5];
             for (int i = 0; i < Map.GetLength(0); i++){
@@ -136,22 +165,25 @@ namespace DungeonExplorer{
             }
             return Map;
         }
-
+        /// <summary>
+        /// Receives input from the user for a direction checks
+        /// if it is valid and then moves the player to that room
+        /// then Starts the battle 
+        /// </summary>
         private void MoveRoom(){
-            
             bool invalidAction = true;
             do{
                 Console.WriteLine("Enter Direction, (up, down, left, right): ");
                 string option = Console.ReadLine()?.ToLower();
-                int currentY = currentRoom.GetYCoordinate();
-                int currentX = currentRoom.GetXCoordinate();
+                int currentY = _currentRoom.GetYCoordinate();
+                int currentX = _currentRoom.GetXCoordinate();
                 switch (option){
                     case "up":
                         if (currentY - 1 < 0){
                             Console.WriteLine("Room Doesnt Exist");
                             break;
                         }
-                        currentRoom = map[currentX,currentY + 1];
+                        _currentRoom = _map[currentX,currentY + 1];
                         invalidAction = false;
                         break;
                     case "down":
@@ -159,15 +191,15 @@ namespace DungeonExplorer{
                             Console.WriteLine("Room Doesnt Exist");
                             break;
                         }
-                        currentRoom = map[currentX,currentY + 1];
+                        _currentRoom = _map[currentX,currentY + 1];
                         invalidAction = false;
                         break;
                     case "left":
-                        if (currentRoom.GetXCoordinate() - 1 < 0){
+                        if (_currentRoom.GetXCoordinate() - 1 < 0){
                             Console.WriteLine("Room Doesnt Exist");
                             break;
                         }
-                        currentRoom = map[currentX - 1, currentY];
+                        _currentRoom = _map[currentX - 1, currentY];
                         invalidAction = false;
                         break;
                     case "right":
@@ -175,7 +207,7 @@ namespace DungeonExplorer{
                             Console.WriteLine("Room Doesnt Exist");
                             break;
                         }
-                        currentRoom = map[currentX + 1, currentY];
+                        _currentRoom = _map[currentX + 1, currentY];
                         invalidAction = false;
                         break;
                     default:
@@ -184,8 +216,8 @@ namespace DungeonExplorer{
                 }
             } while (invalidAction);
 
-            if (currentRoom.Enemy != null){
-                currentRoom.Enemy.DoBattle(player);
+            if (_currentRoom.Enemy != null){
+                _currentRoom.Enemy.DoBattle(_player);
             }
         }
     }
