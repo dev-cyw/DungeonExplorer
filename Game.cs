@@ -168,6 +168,7 @@ namespace DungeonExplorer
         }
 
         /// <summary>
+        ///     Show the current status of the player
         /// </summary>
         private void CurrentStatus()
         {

@@ -38,9 +38,9 @@ namespace DungeonExplorer
         }
 
         /// <summary>
-        ///     Attacks other
+        ///     Attacks anything that has the entity class
         /// </summary>
-        /// <param name="target"></param>
+        /// <param name="target">Goblin or Player</param>
         public void Attack(Entity target)
         {
             if (target is Player player) GameTesting.CheckPlayerHealth(player);

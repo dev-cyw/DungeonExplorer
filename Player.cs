@@ -5,12 +5,15 @@ using System.Linq;
 namespace DungeonExplorer
 {
     /// <summary>
+    ///     Player Class that controls all the parts of
+    ///     the player and is a child class of Entity class
     /// </summary>
     public class Player : Entity
     {
         private readonly List<Item> _inventory = new List<Item>();
 
         /// <summary>
+        ///     The Player Constructor that makes the inputted player name the player name
         /// </summary>
         /// <param name="name"></param>
         public Player(string name) : base(name, 100, 15)
@@ -19,6 +22,7 @@ namespace DungeonExplorer
         public int GoblinsDefeated { get; private set; }
 
         /// <summary>
+        /// Increase the amount of Goblins defeated
         /// </summary>
         public void IncreaseGoblinsDefeated()
         {
@@ -26,8 +30,10 @@ namespace DungeonExplorer
         }
 
         /// <summary>
+        /// Pickups the item and puts it in the inventory and
+        /// notifies the user of which item it is  
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">The item from the room you are currently in</param>
         public void PickUpItem(Item item)
         {
             if (item == null)
@@ -41,8 +47,9 @@ namespace DungeonExplorer
         }
 
         /// <summary>
+        /// Loops Through the inventory to remove it from the inventory
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">the name of the item to remove</param>
         public void RemoveItem(string name)
         {
             foreach (var item in _inventory.Where(item => item.Name == name))
@@ -59,25 +66,28 @@ namespace DungeonExplorer
         }
 
         /// <summary>
+        ///     Gets all the inventory contents 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>returns the string of the inventory contents</returns>
         public string InventoryContents()
         {
             return string.Join(", ", _inventory);
         }
 
         /// <summary>
+        /// Checks inventory to count how many of each item is there
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+        /// <param name="name">the name of the item to count</param>
+        /// <returns>the count of item</returns>
         public int GetItemAmount(string name)
         {
             return _inventory.Count(item => item.Name == name);
         }
 
         /// <summary>
+        ///     Heals the player
         /// </summary>
-        /// <param name="amount"></param>
+        /// <param name="amount">amount to increase health by</param>
         public void Heal(int amount)
         {
             Health += amount;
@@ -85,6 +95,7 @@ namespace DungeonExplorer
         }
 
         /// <summary>
+        /// returns health
         /// </summary>
         /// <returns></returns>
         public int GetHealth()
