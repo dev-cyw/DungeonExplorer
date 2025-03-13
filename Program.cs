@@ -1,19 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DungeonExplorer{
-    internal class Program{
-        static void Main(string[] args){
+namespace DungeonExplorer
+{
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
             string name;
-            do {
+            do
+            {
                 Console.Write("Please Enter Your Name: ");
                 name = Console.ReadLine();
-            } while (string.IsNullOrEmpty(name));
+            } while (string.IsNullOrEmpty(name) || name.Length >= 10);
+
             Console.Clear();
-            Game game = new Game(name);
+            var game = new Game(name);
             game.Start();
         }
     }
